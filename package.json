@@ -1,0 +1,24 @@
+{
+  "name": "projectathena",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.16.1",
+    "express": "^4.17.0",
+    "nodemon": "^1.19.0",
+    "sequelize": "^5.8.6",
+    "socket.io": "^2.2.0",
+    "ts-node": "^8.1.0",
+    "ts-node-dev": "^1.0.0-pre.39"
+  },
+  "devDependencies": {
+    "typescript": "^3.4.5"
+  }
+}
