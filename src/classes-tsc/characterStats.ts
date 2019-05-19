@@ -11,7 +11,7 @@ export default class CharacterStats {
     };
     constructor() {
         stats.forEach((elem: string) => {
-            this.stats[elem] = new Stat(elem, 1, 1);
+            
         });
     }
 }
