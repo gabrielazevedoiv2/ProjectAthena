@@ -18,11 +18,11 @@ module.exports = class RPSServerController {
     }
 
     popPlayer(id) {
-        this.players = this.players.filter((x) => x.id != id)
+        this.players = this.players.filter((x) => x.id != id);
     }
 
     startMatch(player1, player2) {
-
+        // Develop match logic
         this.currentMatches.push({
             player1: {
                 id: player1.id,
