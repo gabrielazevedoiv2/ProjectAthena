@@ -1,7 +1,7 @@
 var socket;
 let playerId;
 window.onload = (window) => {
-    socket = io.connect('http://localhost:3000');
+    socket = io.connect('http://45.77.117.192:3000');
     socket.emit('playerConnected', {"game": "rps"});
     socket.on('matchStarted', (e) => {
         console.log(e)
