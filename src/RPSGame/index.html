@@ -5,11 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>RPSGame</title>
-    <style>
-
-    </style>
+    <link rel="stylesheet" href="CSSLib/colors.css">
+    <link rel="stylesheet" href="CSSLib/css-lib.css">
+    <link rel="stylesheet" href="CSSLib/sizes.css">
 </head>
 <body>
+    <div class="base-flex">
+        <div>
+            <p id="mychoice">Your choice: </p>
+            <button id="rock" value="rock">Rock</button>
+            <button id="paper" value="paper">Paper</button>
+            <button id="scissors" value="scissors">Scissors</button>
+        </div>
+        <div>
+            <p id="theirchoice">Their choice: </p>
+        </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
     <script src="gameController.js"></script>
 </body>
