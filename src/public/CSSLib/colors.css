@@ -35,21 +35,21 @@
 }
 
 .txt-light-gray {
-    color: #D1D1D1;
+    color: #D1D1D1 !important;
 }
 
 .txt-gainsboro {
-    color: #DBDBDB;
+    color: #DBDBDB !important;
 }
 
 .txt-baby-blue {
-    color: #85C7F2;
+    color: #85C7F2 !important;
 }
 
 .txt-granite-gray {
-    color: #636363;
+    color: #636363 !important;
 }
 
 .txt-dark-liver {
-    color: #4C4C4C;
+    color: #4C4C4C !important;
 }

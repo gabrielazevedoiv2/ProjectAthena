@@ -8,22 +8,34 @@
     <link rel="stylesheet" type="text/css" href="http://localhost:3000/csslib/colors.css">
     <link rel="stylesheet" type="text/css" href="http://localhost:3000/csslib/css-lib.css">
     <link rel="stylesheet" type="text/css" href="http://localhost:3000/csslib/sizes.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-    <div class="base-flex">
-        <div>
-            <p id="mychoice">Your choice: </p>
-            <div id="findMatch">
-                <button id="findMatchBtn">Find Match</button>
+    <div class="main bg-gainsboro" id="main">
+        <div class="nav flex bg-dark-liver shadow-z2">
+            <div class="float-left">
+                <a class="txt-gainsboro ft-22 flex" href="/"><i class="material-icons">keyboard_arrow_left</i></a>
             </div>
-            <div id="matchOptions" style="display: none;">
-                <button id="rock" value="rock">Rock</button>
-                <button id="paper" value="paper">Paper</button>
-                <button id="scissors" value="scissors">Scissors</button>
+            <div>
+                <a class="txt-gainsboro ft-22" href="#">Rock, Paper & Scissors</a>
             </div>
         </div>
-        <div>
-            <p id="theirchoice">Their choice: </p>
+        <div class="flex-justify">
+            <div>
+                <p id="mychoice">Your choice: </p>
+                <div id="findMatch">
+                    <button id="findMatchBtn">Find Match</button>
+                </div>
+                <div id="matchOptions" style="display: none;">
+                    <button id="rock" value="rock">Rock</button>
+                    <button id="paper" value="paper">Paper</button>
+                    <button id="scissors" value="scissors">Scissors</button>
+                </div>
+            </div>
+            <div>
+                <p id="theirchoice">Their choice: </p>
+            </div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>

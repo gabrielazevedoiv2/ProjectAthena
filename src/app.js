@@ -4,8 +4,8 @@ const RPSServerController = require('./RPSGame/rpsServerController');
 
 // Express app logic
 const app = express();
-app.use('/', express.static(__dirname + '/public/Index'));
 app.use("/rps", express.static(__dirname + '/RPSGame'));
+app.use("/", express.static(path.join(__dirname, '/public/Index')));
 app.use("/csslib", express.static(path.join(__dirname, '/public/CSSLib')));
 
 app.get('/', (req, res) => {
