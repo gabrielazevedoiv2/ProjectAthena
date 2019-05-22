@@ -16,95 +16,129 @@ module.exports = class RPSServerController {
         this.players.push({
             id: client.id,
             inMatch: false,
+            searching: false,
             client: client
         });
         client.on('disconnect', (e) => {
             console.log(client.id + ' disconnected');
             this.popPlayer(client.id);
         });
-        const unmatchedPlayers = this.players.filter((x) => x.inMatch == false);
-        if (unmatchedPlayers.length > 1) {
-            this.startMatch(unmatchedPlayers[0], unmatchedPlayers[1]);
-        }
+        client.on('findMatch', (e) => {
+            this.players.find((x) => x.id == client.id).searching = true;
+            this.findMatch();
+        });
     }
 
     popPlayer(id) {
         this.players = this.players.filter((x) => x.id != id);
     }
 
+    findMatch() {
+        this.socket.emit('playersSearching', {
+            players: this.players.filter((x) => x.searching == true).length
+        });
+        var findInterval = setInterval(() => {
+            var playersSearching = this.players.filter((x) => x.searching == true);
+            if (this.players.filter((x) => x.searching == true).length > 1) {
+                this.startMatch(playersSearching[0], playersSearching[1]);
+                this.removeFromQueue([playersSearching[0].id, playersSearching[1].id]);
+                clearInterval(findInterval);
+            }
+        }, 1000);
+    }
+
     startMatch(player1, player2) {
-        this.players.find((x) => x.id == player1.id).inMatch = true;
-        this.players.find((x) => x.id == player2.id).inMatch = true;
-        // Develop match logic
+        this.setInMatch([player1.id, player2.id]);
         const matchId = 'match_'+new Date().toLocaleString();
         this.currentMatches.push({
             matchId: matchId,
-            player1: {
+            players: [{
                 id: player1.id,
                 choice: ''
-            },
-            player2: {
+            },{
                 id: player2.id,
                 choice: ''
-            }
+            }]
         });
-        this.socket.to(player1.id).emit('matchStarted', {
-            playerId: player1.id,
-            matchId: matchId
-        });
-        this.socket.to(player2.id).emit('matchStarted', {
-            playerId: player2.id,
-            matchId: matchId
-        });
-        player1.client.once('playerChoice', (e) => {
-            const match = this.currentMatches.find(x => x.matchId == matchId);
-            match.player1.choice = e.value;
-            if (match.player1.choice != '' && match.player2.choice != '') {
-                const result = this.getMatchResult(match);
-                if (result != 'draw') {
-                    this.socket.to(player1.id).emit('matchResult', {
-                        result: result
-                    });
-                    this.socket.to(player2.id).emit('matchResult', {
-                        result: result
-                    });
-                }
-            }
-        });        
-        player2.client.once('playerChoice', (e) => {
-            const match = this.currentMatches.find(x => x.matchId == matchId);
-            match.player2.choice = e.value;
-            if (match.player1.choice != '' && match.player2.choice != '') {
-                const result = this.getMatchResult(match);
-                if (result != 'draw') {
-                    this.socket.to(player1.id).emit('matchResult', {
-                        result: result
-                    });
-                    this.socket.to(player2.id).emit('matchResult', {
-                        result: result
-                    });
-                }
-            }
-        });
+        this.sendMatchStarted([player1.id, player2.id], matchId);
+        this.awaitPlayerChoices([player1, player2], matchId);
     }
 
     getMatchResult(match) {
-        if ((match.player1.choice == 'rock' && match.player2.choice == 'scissors') || 
-            (match.player1.choice == 'scissors' && match.player2.choice == 'paper') ||
-            (match.player1.choice == 'paper' && match.player2.choice == 'rock')) {
+        if ((match.players[0].choice == 'rock' && match.players[1].choice == 'scissors') || 
+            (match.players[0].choice == 'scissors' && match.players[1].choice == 'paper') ||
+            (match.players[0].choice == 'paper' && match.players[1].choice == 'rock')) {
             return {
-                winner: match.player1,
-                loser: match.player2,
+                winner: match.players[0],
+                loser: match.players[1],
             }
-        } else if ((match.player2.choice == 'rock' && match.player1.choice == 'scissors') || 
-            (match.player2.choice == 'scissors' && match.player1.choice == 'paper') ||
-            (match.player2.choice == 'paper' && match.player1.choice == 'rock')) {
+        } else if ((match.players[1].choice == 'rock' && match.players[0].choice == 'scissors') || 
+            (match.players[1].choice == 'scissors' && match.players[0].choice == 'paper') ||
+            (match.players[1].choice == 'paper' && match.players[0].choice == 'rock')) {
             return {
-                winner: match.player2,
-                loser: match.player1
+                winner: match.players[1],
+                loser: match.players[0]
             }   
         } else {
-            return 'draw';
+            return 'draw';            
         }
     }
+
+    setInQueue(playersIds) {
+        playersIds.forEach((x) => {
+            this.players.find((y) => y.id == x).searching = true;
+        });
+    }
+
+    setInMatch(playersIds) {
+        playersIds.forEach((x) => {
+            this.players.find((y) => y.id == x).inMatch = false;
+        });
+    }
+
+    removeFromQueue(playersIds) {
+        playersIds.forEach((x) => {
+            this.players.find((y) => y.id == x).searching = false;
+        });
+    }
+
+    removeFromMatch(playersIds) {
+        playersIds.forEach((x) => {
+            this.players.find((y) => y.id == x).inMatch = false;
+            this.socket.to(x).emit('canMatchAgain');
+        });
+    }
+
+    sendMatchStarted(playersIds, matchId) {
+        playersIds.forEach((x) => {
+            this.socket.to(x).emit('matchStarted', {
+                playerId: x,
+                matchId: matchId
+            });
+        });
+    }
+
+    awaitPlayerChoices(players, matchId) {
+        players.forEach((x) => {
+            x.client.once('playerChoice', (e) => {
+                this.currentMatches.find((y) => y.matchId == matchId).players.find((y) => y.id == x.id).choice = e.value;
+                const match = this.currentMatches.find(y => y.matchId == matchId);
+                console.log(match);
+                if (match.players[0].choice != '' && match.players[1].choice != '') {
+                    const result = this.getMatchResult(match);
+                    this.sendMatchResult([match.players[0].id, match.players[1].id], result);
+                }
+            });
+        });
+    }
+
+    sendMatchResult(playerIds, result) {
+        playerIds.forEach((x) => {
+            this.socket.to(x).emit('matchResult', {
+                result: result
+            });
+        });
+        this.removeFromMatch(playerIds);
+    }
+
 }
