@@ -6,10 +6,50 @@
     background-color: black;
 }
 
+.bg-light-gray {
+    background-color: #D1D1D1;
+}
+
+.bg-gainsboro {
+    background-color: #DBDBDB;
+}
+
+.bg-baby-blue {
+    background-color: #85C7F2;
+}
+
+.bg-granite-gray {
+    background-color: #636363;
+}
+
+.bg-dark-liver {
+    background-color: #4C4C4C;
+}
+
 .txt-white {
     color: white;
 }
 
 .txt-black {
     color: black;
+}
+
+.txt-light-gray {
+    color: #D1D1D1;
+}
+
+.txt-gainsboro {
+    color: #DBDBDB;
+}
+
+.txt-baby-blue {
+    color: #85C7F2;
+}
+
+.txt-granite-gray {
+    color: #636363;
+}
+
+.txt-dark-liver {
+    color: #4C4C4C;
 }
