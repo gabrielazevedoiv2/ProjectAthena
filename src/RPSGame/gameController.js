@@ -2,7 +2,8 @@ var socket;
 let playerId;
 window.onload = (window) => {
     // Socket
-    socket = io.connect('http://projectathena.tech:3000');
+    // socket = io.connect('http://projectathena.tech:3000');
+    socket = io.connect('http://localhost:3000');
     socket.emit('playerConnected', {"game": "rps"});
     socket.on('matchStarted', (e) => {
         console.log(e)
