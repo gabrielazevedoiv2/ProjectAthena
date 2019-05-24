@@ -8,7 +8,8 @@ window.onload = (window) => {
         posy = 0;
         const gameController = new PongController(socket, document.getElementById('pong'));
     });
-    // Controller
+    // Controller    
+    const gameController = new PongController(socket, document.getElementById('pong'));
 }   
 
 class PongController {
@@ -22,8 +23,9 @@ class PongController {
     }
 
     init() {
-        this.context.strokeStyle = "#000";
-        this.context.strokeRect(0, 0, this.canvas.)
+        this.context.fillStyle = "#000";
+        this.context.fillRect(0, 0, this.canvas.width, 2);
+        this.context.fillRect(0, this.canvas.height-2, this.canvas.width, 2);
     }
 
     findMatch() {
@@ -35,9 +37,9 @@ class PongController {
 
     matchStart(e) {
         this.context.fillStyle = 'blue';
-        this.context.fillRect(this.player.pos.x, this.player.pos.y, 20, 100);
+        this.context.fillRect(this.player.pos.x, this.player.pos.y, 2, 10);
         this.context.fillStyle = 'red';
-        this.context.fillRect(this.enemy.pos.x, this.enemy.pos.y, 20, 100);
+        this.context.fillRect(this.enemy.pos.x, this.enemy.pos.y, 2, 10);
     }
 
     moveUp(e) {
