@@ -1,10 +1,13 @@
 const express = require('express');
 const path = require('path');
 const RPSServerController = require('./RPSGame/rpsServerController');
+const PongServerController = require('./PongGame/pongServerController');
 
 // Express app logic
 const app = express();
 app.use("/rps", express.static(__dirname + '/RPSGame'));
+app.use("/pong", express.static(__dirname + '/PongGame'));
+app.use("/dsrpg", express.static(__dirname + '/DeadSimpleRPG'));
 app.use("/", express.static(path.join(__dirname, '/public/Index')));
 app.use("/csslib", express.static(path.join(__dirname, '/public/CSSLib')));
 
@@ -24,6 +27,7 @@ const server = app.listen(3000, () => {
 const io = require('socket.io').listen(server);
 
 const RPSServer = new RPSServerController(io); // new instance of RPS game
+const PongServer = new PongServerController(io);
 
 io.on('connection', (client) => {
     console.log(client.id + ' connected');
@@ -34,6 +38,8 @@ io.on('connection', (client) => {
             case 'rps':
                 RPSServer.pushPlayer(client);
                 break;
+            case 'pong':
+                PongServer.pushPlayer(client);
         }
     });
 });
