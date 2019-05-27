@@ -9,6 +9,7 @@
 
      <!-- Compiled and minified JavaScript -->
      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+     <script src="enemies.js"></script>
      <script src="itens.js"></script>
      <script src="main.js"></script>
     <title>DeadSimpleRPG</title>
@@ -18,6 +19,10 @@
         <div style="display: flex; justify-content: space-around; align-items: center; height: 100%;">
             <div style="background: chocolate; width: 40px; height: 40px;"></div>
             <div style="background:cornflowerblue; width: 40px; height: 40px;"></div>
+            <div style="display: flex; position: absolute; height: 50%; width: 100%; justify-content: center;
+            align-items: center; background-color: #eee;" id="modalFight">        
+                <button class="waves-effect waves-light btn-large" id="startFight">Start</button>
+            </div>
         </div>
     </div>
     <div class="card-panel teal" style="margin: 0; height: 50vh; display: flex; justify-content: center; flex-direction: column;">
