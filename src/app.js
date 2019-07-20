@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const RPSServerController = require('./RPSGame/rpsServerController');
 const PongServerController = require('./PongGame/pongServerController');
+const AthenaServer = require('./Athena/Athena');
 
 // Express app logic
 const app = express();
@@ -28,10 +29,17 @@ const io = require('socket.io').listen(server);
 
 const RPSServer = new RPSServerController(io); // new instance of RPS game
 const PongServer = new PongServerController(io);
+const athenaServers = [];
 
 io.on('connection', (client) => {
     console.log(client.id + ' connected');
     client.send(client.id);
+    client.on("athenaConnected", (e) => {
+        athenaServers.push(new AthenaServer(io, client, e));
+    });
+    client.on("athenaDisconnected", (e) => {
+
+    })
     // When player connects, assign it's id to the game it requested.
     client.on('playerConnected', (e) => {
         switch (e.game) {
