@@ -10,25 +10,30 @@ module.exports = class AthenaServer {
 
     init() {
         this.connection = new SSHClient();
-        this.connection.on('ready', () => {
-            this.socket.to(this.client.id).emit('data', '\r\n*** SSH CONNECTION ESTABLISHED ***\r\n');
-            this.connection.shell((err, stream) => {
-                if (err) {
-                    return this.socket.to(this.client.id).emit('data', '\r\n*** SSH SHELL ERROR: ' + err.message + ' ***\r\n');
-                }
-                this.socket.on('data', (data) => {
-                    stream.write(data);
+        try {
+            this.connection.on('ready', () => {
+                this.socket.to(this.client.id).emit('data', '\r\n*** SSH CONNECTION ESTABLISHED ***\r\n');
+                this.connection.shell((err, stream) => {
+                    if (err) {
+                        return this.socket.to(this.client.id).emit('data', '\r\n*** SSH SHELL ERROR: ' + err.message + ' ***\r\n');
+                    }
+                    this.socket.on('data', (data) => {
+                        stream.write(data);
+                    });
+                    stream.on('data', (data) => {
+                        this.socket.to(this.client.id).emit('data', data.toString('binary'))
+                    }).on('close', () => {
+                        this.connection.end();
+                    })
                 });
-                stream.on('data', (data) => {
-                    this.socket.to(this.client.id).emit('data', data.toString('binary'))
-                }).on('close', () => {
-                    this.connection.end();
-                })
-            });
-        }).on('close', () => {
-            this.socket.to(this.client.id).emit('data', '\r\n*** SSH CONNECTION CLOSED ***\r\n');
-        }).on('error', (err) => {
-            socket.emit('data', '\r\n*** SSH CONNECTION ERROR: ' + err.message + ' ***\r\n');
-        }).connect(this.config);
+            }).on('close', () => {
+                this.socket.to(this.client.id).emit('data', '\r\n*** SSH CONNECTION CLOSED ***\r\n');
+            }).on('error', (err) => {
+                socket.emit('data', '\r\n*** SSH CONNECTION ERROR: ' + err.message + ' ***\r\n');
+            }).connect(this.config);
+        } catch(e) {
+            console.log(e.toString());
+            this.socket.emit('error', e);
+        }
     }
 }

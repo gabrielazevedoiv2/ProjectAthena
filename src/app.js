@@ -20,7 +20,7 @@ app.get('/rps', (req, res) => {
     res.sendFile('index.html');
 });
 
-const server = app.listen(3000, () => {
+const server = app.listen(3010, () => {
     console.log('Project Athena listening on port 3000');
 });
 
