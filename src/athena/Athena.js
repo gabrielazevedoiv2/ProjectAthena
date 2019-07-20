@@ -29,7 +29,7 @@ module.exports = class AthenaServer {
             }).on('close', () => {
                 this.socket.to(this.client.id).emit('data', '\r\n*** SSH CONNECTION CLOSED ***\r\n');
             }).on('error', (err) => {
-                socket.emit('data', '\r\n*** SSH CONNECTION ERROR: ' + err.message + ' ***\r\n');
+                this.socket.emit('data', '\r\n*** SSH CONNECTION ERROR: ' + err.message + ' ***\r\n');
             }).connect(this.config);
         } catch(e) {
             console.log(e.toString());
