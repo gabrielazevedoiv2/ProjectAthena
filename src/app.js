@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const RPSServerController = require('./RPSGame/rpsServerController');
 const PongServerController = require('./PongGame/pongServerController');
-const AthenaServer = require('./Athena/Athena');
+const AthenaServer = require('./athena/athena');
 
 // Express app logic
 const app = express();
